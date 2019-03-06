@@ -5,7 +5,7 @@ import cherrypy
 import telegram
 from telegram.ext import CommandHandler, MessageHandler, Filters, Dispatcher
 
-from settings import NAME, PORT, TOKEN
+from settings import NAME, PORT, TOKEN, CHAT_ID
 
 
 class SimpleWebsite:
@@ -32,7 +32,7 @@ class BotComm:
         self.dp = Dispatcher(self.bot, self.update_queue)
 
         self.dp.add_handler(CommandHandler("start", self._start))
-        self.dp.add_handler(MessageHandler(Filters.text, self._echo))
+        self.dp.add_handler(MessageHandler(Filters.text, self._process_update))
         self.dp.add_error_handler(self._error)
 
     @cherrypy.tools.json_in()
@@ -47,11 +47,24 @@ class BotComm:
     def _start(self, bot, update):
         update.effective_message.reply_text("Hi!")
 
-    def _echo(self, bot, update):
-        update.effective_message.reply_text(update.effective_message.text)
-        update.effective_message.reply_text(update.effective_message.message_id)
-        update.effective_message.reply_text(update.effective_message.from_user.id)
-        update.effective_message.reply_text(update.effective_message.chat.id)
+    def _accept_order(self, bot, update):
+        order_text = update.effective_message.text
+        order_user = update.effective_message.from_user
+        order_user_first_name = order_user.first_name
+        order_user_last_name = order_user.last_name
+        order_user_username = order_user.username
+        text = "{first_name} {last_name} ({username}) " \
+               "желает: {order}".format(first_name=order_user_first_name,
+                                        last_name=order_user_last_name,
+                                        username=order_user_username,
+                                        order=order_text)
+        self.bot.send_message(chat_id=CHAT_ID, text=text)
+        update.effective_message.reply_text("Ваш заказ принят!")
+
+    def _process_update(self, bot, update):
+        chat_id = update.effective_message.chat.id
+        if not chat_id == CHAT_ID:
+            self._accept_order(bot, update)
 
 
 if __name__ == "__main__":
