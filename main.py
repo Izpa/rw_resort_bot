@@ -1,11 +1,21 @@
 import logging
+import os
 from queue import Queue
 
 import cherrypy
 import telegram
+from sqlalchemy import create_engine
 from telegram.ext import CommandHandler, MessageHandler, Filters, Dispatcher
 
 from settings import NAME, PORT, TOKEN
+
+
+db_url = os.environ.get("DATABASE_URL")
+db_engine = create_engine(db_url)
+create_user_table_query = """
+CREATE TABLE IF NOT EXISTS users (i integer);
+"""
+db_engine.execute(create_user_table_query).scalar()
 
 
 class SimpleWebsite:
