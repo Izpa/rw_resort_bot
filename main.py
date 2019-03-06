@@ -8,13 +8,13 @@ from telegram.ext import CommandHandler, MessageHandler, Filters, Dispatcher
 from settings import NAME, PORT, TOKEN
 
 
-class SimpleWebsite(object):
+class SimpleWebsite:
     @cherrypy.expose
     def index(self):
         return """<H1>Welcome!</H1>"""
 
 
-class BotComm(object):
+class BotComm:
     exposed = True
 
     def __init__(self, TOKEN, NAME):
@@ -49,6 +49,9 @@ class BotComm(object):
 
     def _echo(self, bot, update):
         update.effective_message.reply_text(update.effective_message.text)
+        update.effective_message.reply_text(update.effective_message.message_id)
+        update.effective_message.reply_text(update.effective_message.from_user)
+        update.effective_message.reply_text(update.effective_message.chat)
 
 
 if __name__ == "__main__":
