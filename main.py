@@ -50,8 +50,8 @@ class BotComm:
     def _echo(self, bot, update):
         update.effective_message.reply_text(update.effective_message.text)
         update.effective_message.reply_text(update.effective_message.message_id)
-        update.effective_message.reply_text(update.effective_message.from_user)
-        update.effective_message.reply_text(update.effective_message.chat)
+        update.effective_message.reply_text(update.effective_message.from_user.id)
+        update.effective_message.reply_text(update.effective_message.chat.id)
 
 
 if __name__ == "__main__":
