@@ -1,21 +1,11 @@
 import logging
-import os
 from queue import Queue
 
 import cherrypy
 import telegram
-from sqlalchemy import create_engine
 from telegram.ext import CommandHandler, MessageHandler, Filters, Dispatcher
 
 from settings import NAME, PORT, TOKEN
-
-
-db_url = os.environ.get("DATABASE_URL")
-db_engine = create_engine(db_url)
-create_user_table_query = """
-CREATE TABLE IF NOT EXISTS users (i integer);
-"""
-db_engine.execute(create_user_table_query).scalar()
 
 
 class SimpleWebsite:
@@ -67,17 +57,17 @@ class BotComm:
 if __name__ == "__main__":
     # Enable logging
     logging.basicConfig(
-        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
         level=logging.INFO)
     logger = logging.getLogger(__name__)
 
     # Set up the cherrypy configuration
-    cherrypy.config.update({'server.socket_host': '0.0.0.0', })
-    cherrypy.config.update({'server.socket_port': int(PORT), })
+    cherrypy.config.update({"server.socket_host": "0.0.0.0", })
+    cherrypy.config.update({"server.socket_port": int(PORT), })
     cherrypy.tree.mount(SimpleWebsite(), "/")
     cherrypy.tree.mount(
         BotComm(TOKEN, NAME),
         "/{}".format(TOKEN),
-        {'/': {
-            'request.dispatch': cherrypy.dispatch.MethodDispatcher()}})
+        {"/": {
+            "request.dispatch": cherrypy.dispatch.MethodDispatcher()}})
     cherrypy.engine.start()
