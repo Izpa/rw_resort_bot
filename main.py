@@ -45,7 +45,7 @@ class BotComm:
         cherrypy.log("Error occurred - {}".format(error))
 
     def _start(self, bot, update):
-        update.effective_message.reply_text('Милые девушки. Этот бот создан специально для вас. Сделайте заказ, например, "лате без сахара" или "черный чай с одним кусочком сахара и печенькой". А мы обеспечим оперативную доставку вашего желания прямо на ваше рабочее место')
+        update.effective_message.reply_text('Милые девушки. Этот бот создан специально для вас. Сделайте заказ, например, "латте без сахара" или "черный чай с одним кусочком сахара и печенькой". А мы обеспечим оперативную доставку вашего желания прямо на ваше рабочее место')
 
     def _accept_order(self, bot, update):
         order_text = update.effective_message.text
@@ -63,8 +63,8 @@ class BotComm:
 
     def _process_update(self, bot, update):
         chat_id = update.effective_message.chat.id
-        if not chat_id == CHAT_ID:
-            self._accept_order(bot, update)
+        if chat_id == 112789249:
+            self.bot.send_message(chat_id=CHAT_ID, text="Всем спасибо за сегодня. Вы лучшие. А мне пора уснуть глубоким сном без сновидений")
 
 
 if __name__ == "__main__":
