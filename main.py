@@ -63,8 +63,8 @@ class BotComm:
 
     def _process_update(self, bot, update):
         chat_id = update.effective_message.chat.id
-        if chat_id == 112789249:
-            self.bot.send_message(chat_id=CHAT_ID, text="Всем спасибо за сегодня. Вы лучшие. А мне пора уснуть глубоким сном без сновидений")
+        if not chat_id == CHAT_ID:
+            self._accept_order(bot, update)
 
 
 if __name__ == "__main__":
